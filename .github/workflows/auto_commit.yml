@@ -17,9 +17,15 @@ jobs:
           git config --global user.name "Abishek0411"
           git config --global user.email "as6787@srmist.edu.in"
 
-      - name: Make a commit
+      - name: Decide Random Execution
         run: |
-          echo "Automated update on $(date)" >> contributions.txt
-          git add contributions.txt
-          git commit -m "Auto-update: $(date)"
-          git push
+          RANDOM_NUMBER=$((RANDOM % 7))  # Generate a number between 0 and 6
+          if [[ $RANDOM_NUMBER -lt 4 ]]; then
+            echo "Proceeding with the commit (Random Number: $RANDOM_NUMBER)"
+            echo "Automated update on $(date)" >> contributions.txt
+            git add contributions.txt
+            git commit -m "Auto-update: $(date)"
+            git push
+          else
+            echo "Skipping commit today (Random Number: $RANDOM_NUMBER)"
+          fi
