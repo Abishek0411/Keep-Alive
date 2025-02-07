@@ -2,7 +2,7 @@ name: Automated Contribution Commit
 
 on:
   schedule:
-    - cron: '0 12 * * *'  # Runs daily at 12:00 UTC
+    - cron: '0 11 * * *'  # Runs daily at 12:00 UTC
   workflow_dispatch:  # Allows manual triggering
 
 jobs:
@@ -21,11 +21,24 @@ jobs:
         run: |
           RANDOM_NUMBER=$((RANDOM % 7))  # Generate a number between 0 and 6
           if [[ $RANDOM_NUMBER -lt 4 ]]; then
-            echo "Proceeding with the commit (Random Number: $RANDOM_NUMBER)"
-            echo "Automated update on $(date)" >> contributions.txt
+            echo "Proceeding with two commits today (Random Day: $RANDOM_DAY)"
+            
+            # First commit
+            echo "First automated update on $(date)" >> contributions.txt
             git add contributions.txt
-            git commit -m "Auto-update: $(date)"
+            git commit -m "Auto-update 1: $(date)"
+            git push
+            
+            # Wait for a random delay between 3-6 hours before second commit
+            DELAY=$(( (RANDOM % 4 + 3) * 3600 ))  # 3 to 6 hours in seconds
+            echo "Waiting for $DELAY seconds before second commit..."
+            sleep $DELAY
+            
+            # Second commit
+            echo "Second automated update on $(date)" >> contributions.txt
+            git add contributions.txt
+            git commit -m "Auto-update 2: $(date)"
             git push
           else
-            echo "Skipping commit today (Random Number: $RANDOM_NUMBER)"
+            echo "Skipping commits today (Random Day: $RANDOM_DAY)"
           fi
