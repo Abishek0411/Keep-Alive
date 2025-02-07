@@ -1,0 +1,25 @@
+name: Automated Contribution Commit
+
+on:
+  schedule:
+    - cron: '0 12 * * *'  # Runs daily at 12:00 UTC
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "Abishek0411"
+          git config --global user.email "as6787@srmist.edu.in"
+
+      - name: Make a commit
+        run: |
+          echo "Automated update on $(date)" >> contributions.txt
+          git add contributions.txt
+          git commit -m "Auto-update: $(date)"
+          git push
